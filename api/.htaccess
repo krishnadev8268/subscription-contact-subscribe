@@ -1,0 +1,21 @@
+# CORS Headers for API
+<IfModule mod_headers.c>
+    Header always set Access-Control-Allow-Origin "*"
+    Header always set Access-Control-Allow-Methods "POST, GET, OPTIONS"
+    Header always set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With, Accept"
+    Header always set Access-Control-Max-Age "3600"
+</IfModule>
+
+# Handle OPTIONS preflight
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Return 200 for OPTIONS requests
+    RewriteCond %{REQUEST_METHOD} OPTIONS
+    RewriteRule .* - [R=200,L]
+</IfModule>
+
+# Ensure PHP can execute
+<Files "submit.php">
+    SetHandler application/x-httpd-php
+</Files>

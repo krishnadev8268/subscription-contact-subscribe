@@ -1,0 +1,18 @@
+[
+    {
+        "id": 1,
+        "website_name": "Travelassistant",
+        "website_type": "Travel",
+        "owner_name": "Dataram",
+        "website_key": "2501c9584bd8cf0ad32096e8f7469659",
+        "created_at": "2026-01-19T12:52:40+05:30"
+    },
+    {
+        "id": 2,
+        "website_name": "test",
+        "website_type": "hostel",
+        "owner_name": "Anshul",
+        "website_key": "d1ffe44797659ac9562a4ab5d61333c0",
+        "created_at": "2026-01-19T13:18:29+05:30"
+    }
+]

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test - Central Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        button:hover {
+            background: #5568d3;
+        }
+        
+        .alert {
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .alert.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+        
+        .alert.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+        
+        .alert.show {
+            display: block;
+        }
+        
+        .info-box {
+            background: #f0f4ff;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+        
+        code {
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>Central Dashboard API Test</h1>
+            <p>Test the API endpoint by submitting forms below. Make sure to add a website in the admin panel first and copy the API key.</p>
+        </div>
+        
+        <!-- Subscribe Form -->
+        <div class="card">
+            <h2>📧 Test Subscribe Form</h2>
+            
+            <div class="info-box">
+                <strong>Endpoint:</strong> <code>POST /api/submit.php</code><br>
+                <strong>Type:</strong> <code>subscribe</code>
+            </div>
+            
+            <div id="subscribeAlert" class="alert"></div>
+            
+            <form id="subscribeForm">
+                <div class="form-group">
+                    <label for="sub_website_key">Website API Key *</label>
+                    <input type="text" id="sub_website_key" required placeholder="Paste your website key here">
+                </div>
+                
+                <div class="form-group">
+                    <label for="sub_email">Email Address *</label>
+                    <input type="email" id="sub_email" required placeholder="user@example.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="sub_country">Country (Optional)</label>
+                    <input type="text" id="sub_country" placeholder="USA">
+                </div>
+                
+                <button type="submit">Submit Subscription</button>
+            </form>
+        </div>
+        
+        <!-- Contact Form -->
+        <div class="card">
+            <h2>💬 Test Contact Form</h2>
+            
+            <div class="info-box">
+                <strong>Endpoint:</strong> <code>POST /api/submit.php</code><br>
+                <strong>Type:</strong> <code>contact</code>
+            </div>
+            
+            <div id="contactAlert" class="alert"></div>
+            
+            <form id="contactForm">
+                <div class="form-group">
+                    <label for="con_website_key">Website API Key *</label>
+                    <input type="text" id="con_website_key" required placeholder="Paste your website key here">
+                </div>
+                
+                <div class="form-group">
+                    <label for="con_name">Name *</label>
+                    <input type="text" id="con_name" required placeholder="John Doe">
+                </div>
+                
+                <div class="form-group">
+                    <label for="con_email">Email Address *</label>
+                    <input type="email" id="con_email" required placeholder="john@example.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="con_message">Message *</label>
+                    <textarea id="con_message" required placeholder="Your message here..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="con_country">Country (Optional)</label>
+                    <input type="text" id="con_country" placeholder="Canada">
+                </div>
+                
+                <button type="submit">Submit Contact</button>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // Get API base URL (adjust if needed)
+        const API_URL = window.location.origin + '/api/submit.php';
+        
+        // Subscribe Form Handler
+        document.getElementById('subscribeForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const alertBox = document.getElementById('subscribeAlert');
+            const data = {
+                type: 'subscribe',
+                email: document.getElementById('sub_email').value,
+                country: document.getElementById('sub_country').value,
+                website_key: document.getElementById('sub_website_key').value
+            };
+            
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alertBox.className = 'alert success show';
+                    alertBox.textContent = '✓ ' + result.message + ' (ID: ' + result.data.id + ')';
+                    this.reset();
+                } else {
+                    alertBox.className = 'alert error show';
+                    alertBox.textContent = '✗ ' + result.message;
+                }
+            } catch (error) {
+                alertBox.className = 'alert error show';
+                alertBox.textContent = '✗ Network error: ' + error.message;
+            }
+        });
+        
+        // Contact Form Handler
+        document.getElementById('contactForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const alertBox = document.getElementById('contactAlert');
+            const data = {
+                type: 'contact',
+                name: document.getElementById('con_name').value,
+                email: document.getElementById('con_email').value,
+                message: document.getElementById('con_message').value,
+                country: document.getElementById('con_country').value,
+                website_key: document.getElementById('con_website_key').value
+            };
+            
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alertBox.className = 'alert success show';
+                    alertBox.textContent = '✓ ' + result.message + ' (ID: ' + result.data.id + ')';
+                    this.reset();
+                } else {
+                    alertBox.className = 'alert error show';
+                    alertBox.textContent = '✗ ' + result.message;
+                }
+            } catch (error) {
+                alertBox.className = 'alert error show';
+                alertBox.textContent = '✗ Network error: ' + error.message;
+            }
+        });
+    </script>
+</body>
+</html>
