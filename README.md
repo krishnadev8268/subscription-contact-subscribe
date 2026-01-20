@@ -218,7 +218,7 @@ MIT License - Feel free to use for personal or commercial projects
 ## 👨‍💻 Author
 
 **Krishna Maurya**
-- GitHub: [@krishnamaurya-96](https://github.com/krishnamaurya-96)
+- GitHub: [@krishnadev8268](https://github.com/krishnadev8268)
 
 ## 🤝 Contributing
 
